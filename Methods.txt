@@ -1,0 +1,297 @@
+ 14
+
+   K_BTK = 1
+
+   K_MAL = 0
+   K_MAL+BTK = 1
+   K_MAL+SOCS = 0
+   K_MAL+BTK+SOCS = 1
+
+   K_SOCS = 0
+   K_SOCS+INCY = 1
+
+   K_NFKB = 0
+   K_NFKB+INCY = 0
+   K_NFKB+MAL = 0
+   K_NFKB+SOCS = 0
+   K_NFKB+INCY+MAL = 0
+   K_NFKB+MAL+SOCS = 0
+   K_NFKB+INCY+SOCS = 0
+   K_NFKB+INCY+MAL+SOCS = 0
+
+   K_INCY = 0
+   K_INCY+NFKB = 0
+
+
+
+public void createModels(String path) 
+	{
+		try
+		{
+			
+			models=new ArrayList<Models>();
+			File stocks = new File(path);
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(stocks);
+			doc.getDocumentElement().normalize();
+			NodeList nodes = doc.getElementsByTagName("interaction");
+
+			for (int j = 0; j < nodes.getLength(); j++) 
+			{
+				Node node = nodes.item(j);
+
+				if (node.getNodeType() == Node.ELEMENT_NODE)
+				{
+					Element element = (Element) node;
+					if(Integer.parseInt(getValue("sign", element))==1)
+					{
+						Models m=new Models();
+						for(Models m1:models)
+						{
+							if(m1.From==getValue("numInitialEnt", element))
+							{
+								m.Names=m1.Names+","+getValue("numFinalEnt", element);
+								m.To=Integer.parseInt(getValue("numFinalEnt", element));
+								m.From=getValue("numInitialEnt", element);
+								models.remove(m1);
+							}
+							else
+							{
+								m.Names=getValue("numFinalEnt", element);
+								m.To=Integer.parseInt(getValue("numFinalEnt", element));
+								m.From=getValue("numInitialEnt", element);
+							}
+						}				
+					}
+					
+				}
+
+			}
+			
+			for(Models m:models)
+			{
+				String[] s=m.Names.split(",");
+				for(String to:s)
+				{
+					for (int i = 0; i < nodes.getLength(); i++) 
+					{
+						Node n = nodes.item(i).getFirstChild().getNextSibling();
+						NodeList n = nodes.item(i).getChildNodes();
+						for (int j = 0; j < n.getLength(); j++) 
+						{
+							// Remove ks
+							if (n.item(i).getNodeName()=="numInitialEnt" && n.item(i).getTextContent()==m.From) 
+							{
+								nodes.item(i).g
+							}
+							}
+						}
+				}
+			}
+			
+		} catch (IOException ex){
+			ex.printStackTrace();
+		}
+	}
+	
+	
+	public void parsXML(String path) {
+		try {
+			genes = new ArrayList<Gene>();
+			interactions = new ArrayList<Interaction>();
+			models=new ArrayList<Models>();
+			
+			File stocks = new File(path);
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
+					.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(stocks);
+			doc.getDocumentElement().normalize();
+
+			
+			
+			
+			String s[] = new String[] { "gene", "interaction" };
+
+			for (int i = 0; i < s.length; i++) {
+				NodeList nodes = doc.getElementsByTagName(s[i]);
+
+				for (int j = 0; j < nodes.getLength(); j++) {
+					Node node = nodes.item(j);
+
+					if (node.getNodeType() == Node.ELEMENT_NODE) {
+						Element element = (Element) node;
+						
+						
+						
+						
+						if (i == 0) {
+							Gene g = new Gene();
+							g.Name = getValue("name", element);
+							g.Number = Integer.parseInt(getValue("number",
+									element));
+							genes.add(g);
+						} else {
+							
+							
+							
+							Interaction in = new Interaction();
+							in.From = Integer.parseInt(getValue(
+									"numInitialEnt", element));
+							in.To = Integer.parseInt(getValue("numFinalEnt",
+									element));
+							in.Threashold = Integer.parseInt(getValue(
+									"threshold", element));
+							in.Sign = Integer
+									.parseInt(getValue("sign", element));
+							
+							///New
+								Models m=new Models();
+								boolean check=true;
+								for(Models m1:models)
+								{
+									if(Integer.parseInt(m1.From)==in.From)
+									{
+										m.Names=m1.Names+","+getValue("numFinalEnt", element);
+										m.To=Integer.parseInt(getValue("numFinalEnt", element));
+										m.From=getValue("numInitialEnt", element);
+										models.add(m);
+										check=false;
+										m=m1;
+										break;
+									}
+								}	
+								//if(!check)models.remove(m);
+								if(check)
+								{
+									m.Names=getValue("numFinalEnt", element);
+									m.To=Integer.parseInt(getValue("numFinalEnt", element));
+									m.From=getValue("numInitialEnt", element);
+									models.add(m);
+								}
+							///end
+							
+							interactions.add(in);
+						}
+					}
+
+				}
+			}
+int count=1;int del=0;
+for(Models m:models)
+{
+	for(String sm:m.Names.split(","))
+	{
+			ArrayList<String> res = new ArrayList<String>();
+			res.add("VAR\n\n");
+			for (int i = 0; i < genes.size(); i++) {
+				int th = 0;
+				for (int j = 0; j < interactions.size(); j++) {
+					if (genes.get(i).Number == interactions.get(j).From
+							&& th < interactions.get(j).Threashold)
+						th = interactions.get(j).Threashold;
+				}
+				res.add(genes.get(i).Name + "=0 " + th + ";\n");
+			}
+			res.add("\nREG\n\n");
+			
+			
+			
+			for (int i = 0; i < genes.size(); i++) {
+				String acti = "";
+				
+				for (int j = 0; j < interactions.size(); j++) 
+				{
+					if (genes.get(i).Number == interactions.get(j).From
+							&& interactions.get(j).Sign == 0) 
+					{
+						if(Integer.parseInt(m.From)==interactions.get(j).From && interactions.get(j).To==Integer.parseInt(sm))
+						{
+							acti = genes.get(i).Name + " [" + genes.get(i).Name
+									+ "<" + m.Names.split(",").length + "]=>"
+									+ getGeneName(interactions.get(j).To) + ";\n";
+							res.add(acti);
+						}
+						else 
+						{
+							acti = genes.get(i).Name + " [" + genes.get(i).Name
+									+ "<" + interactions.get(j).Threashold + "]=>"
+									+ getGeneName(interactions.get(j).To) + ";\n";
+							res.add(acti);
+						}
+						
+						/*
+						acti = genes.get(i).Name + " [" + genes.get(i).Name
+								+ "<" + interactions.get(j).Threashold + "]=>"
+								+ getGeneName(interactions.get(j).To) + ";\n";
+						res.add(acti);
+						
+						*/
+					}
+				}
+			}
+		
+					for (int i = 0; i < genes.size(); i++) 
+					{
+						String acti = "";
+						for (int j = 0; j < interactions.size(); j++) 
+						{					
+							//New
+								if(genes.get(i).Number == interactions.get(j).From
+										&& interactions.get(j).Sign == 1 )
+								{
+										if(Integer.parseInt(m.From)==interactions.get(j).From && interactions.get(j).To==Integer.parseInt(sm))
+										{
+											acti = genes.get(i).Name + " [" + genes.get(i).Name
+													+ ">=" + m.Names.split(",").length + "]=>"
+													+ getGeneName(interactions.get(j).To) + ";\n";
+											res.add(acti);
+											del++;
+										}
+										else
+										{
+											acti = genes.get(i).Name + " [" + genes.get(i).Name
+													+ ">=" + interactions.get(j).Threashold + "]=>"
+													+ getGeneName(interactions.get(j).To) + ";\n";
+											res.add(acti);
+										}
+								}
+						}
+					}
+					path = path.replace(".xml", "");
+					WriteFile(res, path+ String.valueOf(count++));
+					//for(int i=0;i<del;i++)res.remove(res.size()-1);
+						//end
+					
+					/*
+					if (genes.get(i).Number == interactions.get(j).From
+							&& interactions.get(j).Sign == 1) {
+						acti = genes.get(i).Name + " [" + genes.get(i).Name
+								+ ">=" + interactions.get(j).Threashold + "]=>"
+								+ getGeneName(interactions.get(j).To) + ";\n";
+						res.add(acti);
+					}
+					*/
+				}
+			}
+/*
+			JTextArea xField = new JTextArea("(BTK=1) -> EF(MAL=1)", 20, 30);
+			JPanel myPanel = new JPanel();
+			int result;
+			myPanel.add(xField);
+			do {
+				result = JOptionPane.showConfirmDialog(null, myPanel,
+						"Enter CTL verification formula",
+						JOptionPane.OK_CANCEL_OPTION);
+			} while (xField.getText() == "" || xField.getText() == null
+					|| result != JOptionPane.OK_OPTION);
+
+			res.add("\nCTL\n\n" + xField.getText());
+
+			WriteFile(res, path);
+			*/
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}

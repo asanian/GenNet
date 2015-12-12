@@ -156,10 +156,10 @@ public class StateGraphFrame extends JFrame implements ActionListener, MouseList
 		//		int largeur = 1500;
 		Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		int hight = (int)screenSize.getHeight()-40;
-		int width = (int)screenSize.getWidth()-35;
+		int width = (int)screenSize.getWidth()-40;
 		int hightPanel=hight-80;
 		setBounds(0,0,width, hight);
-		setResizable(false);
+		setResizable(true);
 		setLayout(null);
 
 

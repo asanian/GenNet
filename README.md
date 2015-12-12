@@ -7,30 +7,30 @@ GenNet is a Java based model checking and analysis tool that facilitate the mode
 
 ##Features
 
-Qualitative Modeling
-Quantitative Modeling
-GRN Creation and Loading
-CTL Verification
-K-Parameters Generation
-State Graph
-Cyclic States
-Steady States
-Paths and Neighbour States
-Hybrid Modeling
-Time Delays
-Path Constraints
-Invariant Kernal
-Complete GUI Based Results
-No Manual Effort
-Fast and Efficient Results
+* Qualitative Modeling
+* Quantitative Modeling
+* GRN Creation and Loading
+* CTL Verification
+* K-Parameters Generation
+* State Graph
+* Cyclic States
+* Steady States
+* Paths and Neighbour States
+* Hybrid Modeling
+* Time Delays
+* Path Constraints
+* Invariant Kernal
+* Complete GUI Based Results
+* No Manual Effort
+* Fast and Efficient Results
 
 ##Installation & Download
 
 Latest Version: 2.1 12-12-2015
 
-Disclaimer: GenNet is still in its early development stages. We apologize for any bugs, but can not assume any responsibility for the correctness of the results or any damages caused. The source code is available from the author upon request here 
+Disclaimer: GenNet is still in its early development stages. We apologize for any bugs, but can not assume any responsibility for the correctness of the results or any damages caused.
 
-You can find complete instructions about GenNet download and install at http://asanian.com/gennet
+You can find complete instructions about GenNet download and install at http://asanian.com/gennet OR http://asanian.github.io/GenNet/
 
 ## Contact
 

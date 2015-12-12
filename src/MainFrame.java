@@ -72,7 +72,7 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 		automate = new Automate();
 		this.setIconImage(Toolkit.getDefaultToolkit().getImage(
-				getClass().getResource("images/icon.jpg")));
+				getClass().getResource("images/icon.gif")));
 		frameName = "New document";
 		this.setTitle("GenoTech");
 		Dimension tailleEcran = java.awt.Toolkit.getDefaultToolkit()

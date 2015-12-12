@@ -19,9 +19,9 @@ public class About{
 	public About(){
 		aProposFrame=new JFrame("About the GenNet");
 		aProposTextArea=new JTextArea("\n"+"  GenNet - A tool for qualitative and quantitative model checking" +"\n\n"+
-				"  Version 2.0" +"\n"+"\n"+
+				"  Version 1.0" +"\n"+"\n"+
 				"  Editor Syed Sabah-ud-din Gilani\n\n"+
-				"  Email leepianz@gmail.com\n\n Website http://asanian.com/gennet");
+				"  Email leepianz@gmail.com");
 		aProposTextArea.setEditable(false);
 		aProposTextArea.setPreferredSize(new Dimension(270,420));
 		JScrollPane aProposScrollPane=new JScrollPane(aProposTextArea);

@@ -713,18 +713,12 @@ public class StateGraphFrame extends JFrame implements ActionListener, MouseList
 			{
 
 				actionPerformed(new ActionEvent(showCycle, 0, "cycle"));
-				if(source==exporterHytech ){
-					Global.hfmt=hytechOption="exporterHytech";
-					actionPerformed(new ActionEvent(btnOk, 0, "model"));
-				}	
-				if(source==hyTechPathConstraints ){
-					Global.hfmt=hytechOption="hyTechPathConstraints";
-					actionPerformed(new ActionEvent(btnOk, 0, "model"));
-				}
-				if(source==phaver ){
+				if(source==exporterHytech )
+					hytechOption="exporterHytech";
+				if(source==hyTechPathConstraints )
+					hytechOption="hyTechPathConstraints";
+				if(source==phaver )
 					hytechOption="phaver";
-					JOptionPane.showMessageDialog(null, "This feature is not availabale in current version");
-				}
 
 				
 							
@@ -801,8 +795,8 @@ public class StateGraphFrame extends JFrame implements ActionListener, MouseList
 					FileHyTech m = new FileHyTech("","",destination, automate, file) ;
 					if(Global.hfmt== "exporterHytech")
 						m.hyTechTreatment();
-					//if(hytechOption== "phaver")
-						//m.hyTechPhaver();
+					if(hytechOption== "phaver")
+						m.hyTechPhaver();
 					if(Global.hfmt == "hyTechPathConstraints")
 						m.hyTechTreatment2();
 					MainFrame.HyTech();
@@ -815,8 +809,8 @@ public class StateGraphFrame extends JFrame implements ActionListener, MouseList
 					FileHyTech m = new FileHyTech("","",destination, automate, file) ;
 					if(Global.hfmt== "exporterHytech")
 						m.hyTechTreatment();
-					//if(hytechOption== "phaver")
-						//m.hyTechPhaver();
+					if(hytechOption== "phaver")
+						m.hyTechPhaver();
 					if(Global.hfmt == "hyTechPathConstraints")
 						m.hyTechTreatment2();
 					JOptionPane.showMessageDialog(null, "Hybrid model saved as GRN.hy in home directory" );
